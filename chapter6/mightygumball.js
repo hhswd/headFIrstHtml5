@@ -1,6 +1,3 @@
-
-window.onload = getGumSalesData;
-
 function getGumSalesData(){
   // 本地服务器文件:
   var url = "http://localhost:7777/sales.json";
@@ -22,10 +19,9 @@ function getGumSalesData(){
   request.send(null);
 }
 
-function updateSales(responseText){
+function updateSales(sales){
   // 获取sales显示区域的dom节点：
   var saleDiv = document.getElementById("sales");
-  var sales = JSON.parse(responseText);
   // 遍历sales数组，分行输出销售数据：
   for(var i = 0; i<sales.length; i++){
     var sale = sales[i];
