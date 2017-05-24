@@ -3,9 +3,9 @@ window.onload = getGumSalesData;
 
 function getGumSalesData(){
   // 本地服务器文件:
-  //var url = "http://localhost:7777/sales.json";
+  var url = "http://localhost:7777/sales.json";
   // 远程服务器文件：
-  var url = "http://gumball.wickedlysmart.com";
+ // var url = "http://gumball.wickedlysmart.com";
   var request = new XMLHttpRequest();
   request.open("GET", url);
   request.onload = function(){
@@ -23,17 +23,17 @@ function getGumSalesData(){
 }
 
 function updateSales(responseText){
-  var salesDiv = document.getElementById("sales");
+  // 获取sales显示区域的dom节点：
+  var saleDiv = document.getElementById("sales");
   var sales = JSON.parse(responseText);
-  for(var i=0;i<sales.length;i++){
+  // 遍历sales数组，分行输出销售数据：
+  for(var i = 0; i<sales.length; i++){
     var sale = sales[i];
-    var name = sale.name;
-    var saleAmount = sale.sales;
-
-    var saleItemDiv = document.createElement("div");
-    saleItemDiv.setAttribute("class", "saleItem");
-    saleItemDiv.innerHTML = name + " sold " + saleAmount + "gumballs";
-    salesDiv.appendChild(saleItemDiv);
-
+    var saleItem = document.createElement("div");
+    saleItem.setAttribute("class", "saleItem");
+    // 定义内容:
+    saleItem.innerHTML = sale.name + " sell " + sale.sales + "gumballs";
+    saleDiv.appendChild(saleItem);
   }
+
 }
