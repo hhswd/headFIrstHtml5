@@ -1,3 +1,23 @@
+window.onload = function(){
+  // 定时更新数据
+  setInterval(updateSource, 3000);
+};
+
+// 更新数据源接点
+function updateSource(){
+  var headTag = document.getElementsByTagName("head")[0];
+  // 若已存在脚本引用，则删除
+  var scriptTag = document.getElementById("updateSalesData");
+  if(scriptTag !== null){
+   headTag.removeChild(scriptTag);
+  }
+  // 创建新的script节点
+  scriptTag = document.createElement("script");
+  scriptTag.setAttribute("id", "updateSalesData");
+  scriptTag.setAttribute("src", "http://gumball.wickedlysmart.com/?callback=updateSales");
+  headTag.appendChild(scriptTag);
+}
+
 function getGumSalesData(){
   // 本地服务器文件:
   var url = "http://localhost:7777/sales.json";
