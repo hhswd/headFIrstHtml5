@@ -3,6 +3,8 @@ window.onload = function(){
   setInterval(updateSource, 3000);
 };
 
+// 报告的最新时间
+var lastReportTime = 0;
 // 更新数据源接点
 function updateSource(){
   var headTag = document.getElementsByTagName("head")[0];
@@ -14,7 +16,7 @@ function updateSource(){
   // 创建新的script节点
   scriptTag = document.createElement("script");
   scriptTag.setAttribute("id", "updateSalesData");
-  scriptTag.setAttribute("src", "http://gumball.wickedlysmart.com/?callback=updateSales");
+  scriptTag.setAttribute("src", "http://gumball.wickedlysmart.com/?callback=updateSales" + "&lastreporttime=" + lastReportTime + "&random=" + (new Date()).getTime());
   headTag.appendChild(scriptTag);
 }
 
@@ -39,6 +41,7 @@ function getGumSalesData(){
   request.send(null);
 }
 
+// 更新显示数据
 function updateSales(sales){
   // 获取sales显示区域的dom节点：
   var saleDiv = document.getElementById("sales");
@@ -48,8 +51,10 @@ function updateSales(sales){
     var saleItem = document.createElement("div");
     saleItem.setAttribute("class", "saleItem");
     // 定义内容:
-    saleItem.innerHTML = sale.name + " sell " + sale.sales + "gumballs";
+    saleItem.innerHTML = sale.name + " sell " + sale.sales + " gumballs";
     saleDiv.appendChild(saleItem);
   }
+  // 获取报告的最新时间
+  lastReportTime = sales[sales.length-1].time;
 
 }
