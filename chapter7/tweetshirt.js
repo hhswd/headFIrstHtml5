@@ -56,9 +56,14 @@ function fillBackgroundColor(canvas, context){
  * @return {[type]}         [description]
  */
 function drawShape(canvas, context){
+  // 获取形状选项
   var shapeOption = document.getElementById("shape");
   var shape = shapeOption.options[shapeOption.selectedIndex].value;
   // 绘制随机图形
+  // 定前景色
+  var fgcOption = document.getElementById("foregroundColor");
+  var fgc = fgcOption.options[fgcOption.selectedIndex].value;
+  context.fillStyle = fgc;
   for(var i=0;i<20;i++){
     if(shape == "squares")
       drawRandomSquare(canvas, context);
@@ -77,7 +82,6 @@ function drawRandomSquare(canvas, context){
   var w = Math.floor(Math.random()*40);
   var x = Math.floor(Math.random()*canvas.width);
   var y = Math.floor(Math.random()*canvas.height);
-  context.fillStyle = "lightblue";
   context.fillRect(x, y, w, w);
 }
 
@@ -88,7 +92,18 @@ function drawRandomSquare(canvas, context){
  * @return {[type]}         [description]
  */
 function drawRandomCircle(canvas, context){
+  var radius = Math.floor(Math.random()*40);
+  var x = Math.floor(Math.random()*canvas.width);
+  var y = Math.floor(Math.random()*canvas.height);
 
+  context.beginPath();
+  context.arc(x, y, radius, 0, degreesToRadians(360), true);
+
+  context.fill();
+}
+
+function degreesToRadians(degrees){
+  return (degrees * Math.PI)/180;
 }
 
 
