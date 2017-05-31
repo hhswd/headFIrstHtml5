@@ -2,7 +2,9 @@ window.onload = function(){
   // preview按钮的控制
   var previewButton = document.getElementById("previewButton");
   // 点击按钮后定时更新画布
-  previewButton.onclick = refreshCanvas;
+  //previewButton.onclick = refreshCanvas;
+  // 点击按钮后更新一次画布文字
+  previewButton.onclick = previewHandler;
 
 };
 
@@ -27,12 +29,23 @@ function refreshCanvas(){
 function previewHandler(){
   var canvas = document.getElementById("tshritCanvas");
   var context = canvas.getContext("2d");
+  //绘制logo
+  var tBird = new Image();
+  tBird.src = "twitterBird.png";
+  tBird.onload = function(){
+    context.drawImage(tBird, 20, 120, 70, 70);
+  };
 
   // 背景颜色刷新
   fillBackgroundColor(canvas, context);
+  // 前景色处理
+  var fgcSelection = document.getElementById("foregroundColor");
+  var fgc = fgcSelection.options[fgcSelection.selectedIndex].value;
+  context.fillStyle = fgc;
+  // 绘制文字
+  drawTweet(canvas, context);
   // 绘制图案
-  drawShape(canvas, context);
-  // 文字前景色处理
+  //drawShape(canvas, context);
 }
 
 /**
@@ -57,13 +70,9 @@ function fillBackgroundColor(canvas, context){
  */
 function drawShape(canvas, context){
   // 获取形状选项
-  var shapeOption = document.getElementById("shape");
-  var shape = shapeOption.options[shapeOption.selectedIndex].value;
+  var shapeSelection = document.getElementById("shape");
+  var shape = shapeSelection.options[shapeSelection.selectedIndex].value;
   // 绘制随机图形
-  // 定前景色
-  var fgcOption = document.getElementById("foregroundColor");
-  var fgc = fgcOption.options[fgcOption.selectedIndex].value;
-  context.fillStyle = fgc;
   for(var i=0;i<20;i++){
     if(shape == "squares")
       drawRandomSquare(canvas, context);
@@ -104,6 +113,45 @@ function drawRandomCircle(canvas, context){
 
 function degreesToRadians(degrees){
   return (degrees * Math.PI)/180;
+}
+
+/**
+ * 从网站获取jsonp后更新tweet选项
+ * @param  {[type]} tweets [description]
+ * @return {[type]}        [description]
+ */
+function updateTweets(tweets){
+  var tweetSelection = document.getElementById("tweets");
+
+  for(var i=0;i<tweets.length;i++){
+    var tweet = tweets[i];
+    var tweetOption = document.createElement("option");
+    tweetOption.text = tweet.text;
+    tweetOption.value = tweet.text.replace("\"", "'");
+    tweetSelection.options.add(tweetOption);
+  }
+  tweetSelection.selectedIndex = 0;
+}
+
+/**
+ * 绘制文字
+ * @param  {[type]} canvas  [description]
+ * @param  {[type]} context [description]
+ * @return {[type]}         [description]
+ */
+function drawTweet(canvas, context){
+  context.font = "bold 1em sans-serif";
+  context.textAlign = "left";
+  context.fillText("I saw this tweet", 20, 40);
+
+  var tweetSelection = document.getElementById("tweets");
+  var tweet = tweetSelection.options[tweetSelection.selectedIndex].value;
+  context.font = "italic 1.2em serif";
+  context.fillText(tweet, 30, 100);
+
+  context.font = "bold 1em sans-serif";
+  context.textAlign = "right";
+  context.fillText("and all I got was this lousy t-shirt!", canvas.width-20, canvas.height-40);
 }
 
 
